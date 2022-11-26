@@ -1,15 +1,50 @@
 <template>
-    <div class="block">
+    <div class="block" v-if="showBlock" @click="stopTimer">
         Click here
     </div>
+
 </template>
 
 <script>
 
 
 export default {
-    name: "TimerBlock",
-    props: ['delay']
+    props: ['delay'],
+    data() {
+        return {
+        showBlock: false,
+        timer: null,
+        reactionTime: 0
+        }
+     },
+    mounted() {
+        console.log("component mounted");  
+        setTimeout(() => {
+            this.showBlock = true
+            this.startTimer()
+        }, this.delay)
+    },
+    methods: {
+        startTimer() {
+            this.timer = setInterval(() => {
+                this.reactionTime += 10
+            }, 10)
+        },
+        stopTimer() {
+            clearInterval(this.timer);
+            console.log(this.reactionTime);
+            this.$emit('end', this.reactionTime)
+            
+        },
+    },
+      updated() {
+        console.log("component updated");true
+        
+      },
+      unmounted() {
+        console.log("unmounted");
+      },
+    
        
     
 
@@ -27,6 +62,8 @@ export default {
     text-align: center;
     padding: 100px 0;
     margin: 40px auto;
+    cursor: pointer;
+    letter-spacing: 2px;
 }
 
 </style>
